@@ -23,7 +23,7 @@ struct Deck {
         }
     }
     
-    mutating func drawCard() -> Card {
-        return cards.remove(at: Int.random(in: cards.indices))
+    mutating func drawCard() -> Card? {
+        return cards.count > 0 ? cards.remove(at: Int.random(in: cards.indices)) : nil
     }
 }

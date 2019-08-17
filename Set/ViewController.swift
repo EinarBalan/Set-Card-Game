@@ -10,9 +10,17 @@ import UIKit
 
 class ViewController: UIViewController {
     
-    private var game = Set()
+    private var game = Set() {
+        didSet {
+            labelScore.text = "\(game.score)"
+        }
+    }
     
     @IBOutlet var buttonCards: [UIButton]!
+    
+    @IBOutlet weak var labelScore: UILabel!
+    
+    @IBOutlet weak var buttonDeal: UIButton!
     
     private var cardsOnBoard = [Card]()
     
@@ -24,6 +32,7 @@ class ViewController: UIViewController {
     private func newGame() {
         game = Set()
         resetBoard()
+        buttonDeal.isHidden = false
         updateViewFromModel()
     }
     
@@ -32,7 +41,7 @@ class ViewController: UIViewController {
             cardsOnBoard.removeAll()
         }
         for _ in 1...12 { //add random cards from deck
-            cardsOnBoard += [game.deck.drawCard()]
+            cardsOnBoard += [game.deck.drawCard()!]
         }
         for button in buttonCards { //allow refresh of cards since normally it'll only refresh it it's not set yet
             button.setAttributedTitle(nil, for: .normal)
@@ -42,6 +51,7 @@ class ViewController: UIViewController {
     
     
     private func updateViewFromModel() {
+        
         for index in cardsOnBoard.indices {
             let button = buttonCards[index]
             let card = cardsOnBoard[index]
@@ -54,7 +64,6 @@ class ViewController: UIViewController {
                     button.layer.borderColor = UIColor.white.cgColor
                     button.layer.borderWidth = 3
                     button.backgroundColor = UIColor.black
-                    
                 }
                 
                 var string = ""
@@ -95,7 +104,7 @@ class ViewController: UIViewController {
                     strokeWidth = -1
                 case .style2:
                     //striped
-                    color = color.withAlphaComponent(0.4)
+                    color = color.withAlphaComponent(0.27)
                 case .style3:
                     //outlined
                     strokeWidth = 5
@@ -110,11 +119,22 @@ class ViewController: UIViewController {
                 button.setAttributedTitle(attributedString, for: .normal)
             }
             
-            //show selection
-            if (game.selectedCards.contains(card)) {
+            //show outline for matched or selected cards
+            if (game.selectedCards.count >= 3), (game.selectedCards.contains(card)) {
+                if (game.checkMatch(for: game.selectedCards)) { //successful match attempt
+                    button.layer.borderColor = UIColor.green.cgColor
+                }
+                else if !(game.checkMatch(for: game.selectedCards)){ //failed match attempt
+                    button.layer.borderColor = UIColor.red.cgColor
+                }
+                
+            }
+                
+            else if (game.selectedCards.contains(card)) { //selected
                 button.layer.borderColor = UIColor.orange.cgColor
             }
-            else {
+                
+            else { // not selected
                 button.layer.borderColor = UIColor.white.cgColor
             }
             
@@ -123,20 +143,20 @@ class ViewController: UIViewController {
                 button.layer.borderWidth = 0
                 button.backgroundColor = UIColor.black
                 button.setAttributedTitle(nil, for: .normal)
-
             }
             
         }
-        
     }
     
     @IBAction func touchCard(_ sender: UIButton) {
         if let cardIndex = buttonCards.firstIndex(of: sender) {
-            let card = cardsOnBoard[cardIndex]
-            
-            //show selection/deselection with blue border
-            game.selectCard(card)
-            updateViewFromModel()
+            if !(cardIndex > cardsOnBoard.count){
+                let card = cardsOnBoard[cardIndex]
+                
+                //show selection with border
+                game.selectCard(card)
+                updateViewFromModel()
+            }
         }
     }
     
@@ -144,12 +164,29 @@ class ViewController: UIViewController {
         newGame()
     }
     
-    @IBAction func dealThreeCards(_ sender: UIButton) {
-        if (cardsOnBoard.count < 22) { //only allow draw cards if drawing three cards will result in board with <= 24 cards
-            for _ in 1...3 {
-                cardsOnBoard.append(game.deck.drawCard())
+    @IBAction func dealThreeCards(_ sender: UIButton?) {
+        if (game.deck.cards.count > 2) {
+            if (game.matchedCards.count >= 3) { //replace matched cards
+                for index in cardsOnBoard.indices {
+                    if game.matchedCards.contains(cardsOnBoard[index]){
+                        game.matchedCards.remove(at: game.matchedCards.firstIndex(of: cardsOnBoard[index])!) //remove from matched
+                        if let randCard = game.deck.drawCard(){
+                            cardsOnBoard[index] = randCard //redraw card
+                        }
+                    }
+                }
+            }
+            else if (cardsOnBoard.count < 22) { //only allow draw cards if drawing three cards will result in board with <= 24 cards
+                for _ in 1...3 {
+                    if let randCard = game.deck.drawCard(){
+                        cardsOnBoard.append(randCard)
+                    }
+                }
             }
             updateViewFromModel()
+        }
+        else {
+            sender?.isHidden = true
         }
     }
 }

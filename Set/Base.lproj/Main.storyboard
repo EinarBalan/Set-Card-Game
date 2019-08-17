@@ -233,29 +233,37 @@
                                 </constraints>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G5y-XE-w04">
-                                <rect key="frame" x="169.66666666666666" y="670" width="75" height="30"/>
+                                <rect key="frame" x="169.66666666666666" y="690" width="75" height="30"/>
                                 <state key="normal" title="New Game"/>
                                 <connections>
                                     <action selector="clickNewGame:" destination="BYZ-38-t0r" eventType="touchUpInside" id="otg-PX-fKY"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3qg-BV-kGs">
-                                <rect key="frame" x="143" y="636" width="128" height="30"/>
+                                <rect key="frame" x="143" y="660" width="128" height="30"/>
                                 <state key="normal" title="Deal 3 More Cards"/>
                                 <connections>
                                     <action selector="dealThreeCards:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YfY-Ca-d0M"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IEz-Ga-qpy">
+                                <rect key="frame" x="15.999999999999998" y="677" width="22.333333333333329" height="43"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="36"/>
+                                <color key="textColor" red="0.98455625772476196" green="0.97870177030563354" blue="0.95014351606369019" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="G5y-XE-w04" firstAttribute="top" secondItem="3qg-BV-kGs" secondAttribute="bottom" constant="4" id="2nM-zA-XDh">
+                            <constraint firstItem="IEz-Ga-qpy" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="1lT-Vb-vCi"/>
+                            <constraint firstItem="G5y-XE-w04" firstAttribute="top" secondItem="3qg-BV-kGs" secondAttribute="bottom" id="2nM-zA-XDh">
                                 <variation key="heightClass=compact" constant="4"/>
                             </constraint>
                             <constraint firstItem="z4G-J5-BVe" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="16" id="8jk-IR-hrM"/>
                             <constraint firstItem="3qg-BV-kGs" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="PPz-RN-Wt8"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="IEz-Ga-qpy" secondAttribute="bottom" constant="16" id="Syl-QB-QBR"/>
                             <constraint firstItem="G5y-XE-w04" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="WpQ-kI-8so"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="G5y-XE-w04" secondAttribute="bottom" constant="36" id="nmN-lw-wXo">
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="G5y-XE-w04" secondAttribute="bottom" constant="16" id="nmN-lw-wXo">
                                 <variation key="heightClass=compact" constant="8"/>
                             </constraint>
                             <constraint firstItem="z4G-J5-BVe" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="zAp-fG-Xdq"/>
@@ -263,6 +271,8 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="buttonDeal" destination="3qg-BV-kGs" id="f8K-U3-NnW"/>
+                        <outlet property="labelScore" destination="IEz-Ga-qpy" id="84T-vc-ADL"/>
                         <outletCollection property="buttonCards" destination="UoN-YJ-qg0" collectionClass="NSMutableArray" id="Ezr-xb-BOp"/>
                         <outletCollection property="buttonCards" destination="dig-46-ydp" collectionClass="NSMutableArray" id="XuY-M2-3c0"/>
                         <outletCollection property="buttonCards" destination="eYH-AW-ib4" collectionClass="NSMutableArray" id="fnn-ZI-LfQ"/>
